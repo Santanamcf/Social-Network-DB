@@ -1,4 +1,4 @@
-const thoughtsSchema = require("./thoughtsSchema");
-const userSchema = require("./userSchema");
+const thoughtsSchema = require("./Thoughts.js");
+const userSchema = require("./User.js");
 
 module.exports = { thoughtsSchema, userSchema };
