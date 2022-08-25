@@ -3,6 +3,7 @@ const {User, Thoughts} = require('../models');
 module.exports = {
     getThoughts(req, res) {
         Thoughts.find ({})
+        .select('-__v')
         .then((thought) => {
             res.status(200).json(thought)
         })
@@ -19,24 +20,27 @@ module.exports = {
             : res.json(thought)
                 })
     },
-    createThought (req, res) {
-        Thoughts.create(req.body)
-        .then(({_id}) => {
-            return User.findOneAndUpdate(
-                { _id: req.params.userId},
-                {$push: { thoughts: _id } },
-                { new: true }
-            )
+    createThought(req, res) {
+        console.log(req.body);
+        Thoughts.create({
+          thoughtText: req.body.thoughtText,
+          username: req.body.username,
         })
-        .then((thought)=> {
-            !thought
-            ? res.status(404).json({ message: 'No user with that id' })
-            : res.json(thought)
-        })
-        .catch((err) => {
-            res.status(500).json(err)
-        })
-    },
+          .then((thought) => {
+            User.findOneAndUpdate({_id: req.body._id}, { thoughts: [thought._id] })
+            .then(()=>{
+              res.json(thought)
+            }).
+            catch((error) => {
+              console.log(error);
+              return res.status(500).json({msg:" unable to add thought to user", error})
+            })
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(500).json(err);
+          });
+      },
     updateThought (req, res) {
         Thoughts.findOneAndUpdate(
             { _id: req.params.thoughtId },
@@ -63,7 +67,7 @@ module.exports = {
             res.status(500).json(err)
         })
     },
-    createReaction (req, res) {
+    deleteReaction (req, res) {
         Thoughts.findOneAndUpdate(
             { _id: req.params.thoughtId},
             { $pull: {reactions: {reactionId: req.params.reactionId}}},
@@ -81,6 +85,7 @@ module.exports = {
         .catch((err)=> {
             res.status(400).json(err)
         })
-    }
+    },
+    //createReaction
 }
     
