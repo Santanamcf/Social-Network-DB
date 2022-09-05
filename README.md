@@ -15,6 +15,9 @@
   
   ## Installation
   To install the run the folllowing command: npm i
+
+  ## Video
+https://drive.google.com/file/d/1HjBwAuTETWAK0Sy6sEcFfKrZ3hGxcSEt/view
   
   ## Usage
   You use this program by installing all necessary dependencies, and then running node index.js in the command line.
