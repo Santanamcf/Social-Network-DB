@@ -113,7 +113,7 @@ module.exports = {
             if(!dbThoughtsData) {
                 res.status(404).json({msg: 'no thoughts found with this ID'})
                 return
-            }
+            }res.json(dbThoughtData);
         })
     }
 }
